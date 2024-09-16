@@ -163,7 +163,6 @@ export const CreateLinkConfirmView = ({
                 if (createType === 'email_link') utils.shareToEmail(recipient.name ?? '', link[0], usdValue)
                 if (createType === 'sms_link') utils.shareToSms(recipient.name ?? '', link[0], usdValue)
                 if (isPay){
-                    console.log('payIdBBBBBB', payId)
                     const payRes = await fetch('http://localhost:3000/pay', {
                         method: 'POST',
                         headers: {
@@ -174,7 +173,11 @@ export const CreateLinkConfirmView = ({
                             requestId: payId,
                         }),
                     })
-                    setPayTxHash!((await payRes.json()).txHash);
+                    if (payRes.ok) {
+                        setPayTxHash!((await payRes.json()).txHash);
+                    } else {
+                        throw new Error('Something went wrong while claiming: ' + payRes.body)
+                    }
                 }
             }
 
@@ -199,14 +202,18 @@ export const CreateLinkConfirmView = ({
     return (
         <div className="flex w-full flex-col items-center justify-center gap-6 text-center">
             <label className="text-h2">
-                {createType == 'link'
+                {isPay
+                ? 'Pay request link'
+                : createType == 'link'
                     ? 'Text Tokens'
                     : createType == 'direct'
                       ? `Send to ${recipient.name?.endsWith('.eth') ? recipient.name : utils.shortenAddressLong(recipient.address ?? '')}`
                       : `Send to ${recipient.name}`}
             </label>
             <label className="max-w-96 text-start text-h8 font-light">
-                {createType === 'link' &&
+                {isPay &&
+                    'Make a payment to the requester, pay and they will receive it inmediatly'}
+                {!isPay && createType === 'link' &&
                     'Make a payment with the link. Send the link to the recipient. They will be able to claim the funds in any token on any chain from the link.'}
                 {createType === 'email_link' &&
                     `You will send an email to ${recipient.name ?? recipient.address} containing a link. They will be able to claim the funds in any token on any chain from the link.`}
