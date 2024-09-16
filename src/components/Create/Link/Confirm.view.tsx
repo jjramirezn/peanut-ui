@@ -163,7 +163,7 @@ export const CreateLinkConfirmView = ({
                 if (createType === 'email_link') utils.shareToEmail(recipient.name ?? '', link[0], usdValue)
                 if (createType === 'sms_link') utils.shareToSms(recipient.name ?? '', link[0], usdValue)
                 if (isPay){
-                    const payRes = await fetch('http://localhost:3000/pay', {
+                    const payRes = await fetch(`${process.env.NEXT_PUBLIC_TEMP_BACKEND_URL}/pay`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

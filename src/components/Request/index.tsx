@@ -35,7 +35,7 @@ export const Request = () => {
                 errorMessage: '',
             })
             setLoadingState('Generating details')
-            const payRes = await fetch('http://localhost:3000/request', {
+            const payRes = await fetch(`${process.env.NEXT_PUBLIC_TEMP_BACKEND_URL}/request`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
