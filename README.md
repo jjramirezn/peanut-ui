@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app)
 
 [peanut.to](https://peanut.to) | [staging.peanut.to](https://staging.peanut.to) | [xchain.peanut.to](https://xchain.peanut.to) | [experimental.peanut.to](https://experimental.peanut.to)
 
