@@ -41,6 +41,7 @@ export const CreateLinkInputView = ({
     createType,
     recipient,
     crossChainDetails,
+    isPay,
 }: _consts.ICreateScreenProps) => {
     const {
         generateLinkDetails,
@@ -218,6 +219,13 @@ export const CreateLinkInputView = ({
             setLoadingState('Idle')
         }
     }
+
+    useEffect(() => {
+        if (!isPay) return
+        if (isConnected) {
+            handleOnNext()
+        }
+    }, [isPay, isConnected])
 
     useEffect(() => {
         if (!_tokenValue) return

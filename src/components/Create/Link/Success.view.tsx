@@ -24,6 +24,8 @@ export const CreateLinkSuccessView = ({
     createType,
     recipient,
     tokenValue,
+    isPay,
+    payTxHash
 }: _consts.ICreateScreenProps) => {
     const { selectedChainID, selectedTokenAddress, inputDenomination, selectedTokenPrice } = useContext(
         context.tokenSelectorContext
@@ -140,6 +142,21 @@ export const CreateLinkSuccessView = ({
             setTxUsdValue(value)
         }
     }, [])
+
+    if (isPay) return (
+        <div>
+            <label className="text-h2">Yay!</label>
+            <div>
+            <Link
+                className="cursor-pointer text-h8 font-bold text-gray-1 underline"
+                target="_blank"
+                href ={`${utils.getExplorerUrl(selectedChainID)}tx/${payTxHash}`}
+            >
+            {payTxHash}
+            </Link>
+            </div>
+        </div>
+    )
 
     return (
         <div className={`flex w-full flex-col items-center justify-center gap-6 py-2 pb-20 text-center`}>

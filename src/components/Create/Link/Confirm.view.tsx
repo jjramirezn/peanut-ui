@@ -37,6 +37,9 @@ export const CreateLinkConfirmView = ({
     recipient,
     crossChainDetails,
     usdValue,
+    isPay,
+    payId,
+    setPayTxHash
 }: _consts.ICreateScreenProps) => {
     const [showMessage, setShowMessage] = useState(false)
     const { refetchBalances } = useBalance()
@@ -159,6 +162,20 @@ export const CreateLinkConfirmView = ({
 
                 if (createType === 'email_link') utils.shareToEmail(recipient.name ?? '', link[0], usdValue)
                 if (createType === 'sms_link') utils.shareToSms(recipient.name ?? '', link[0], usdValue)
+                if (isPay){
+                    console.log('payIdBBBBBB', payId)
+                    const payRes = await fetch('http://localhost:3000/pay', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            url: link[0],
+                            requestId: payId,
+                        }),
+                    })
+                    setPayTxHash!((await payRes.json()).txHash);
+                }
             }
 
             utils.updatePeanutPreferences({

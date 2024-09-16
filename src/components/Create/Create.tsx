@@ -11,7 +11,10 @@ import { useAccount } from 'wagmi'
 import SafeAppsSDK from '@safe-global/safe-apps-sdk'
 import { useBalance } from '@/hooks/useBalance'
 
-export const Create = () => {
+
+export const Create = ({
+    isPay
+}: {isPay?: boolean}) => {
     const [step, setStep] = useState<_consts.ICreateScreenState>(_consts.INIT_VIEW_STATE)
     const [tokenValue, setTokenValue] = useState<undefined | string>(undefined)
     const [usdValue, setUsdValue] = useState<undefined | string>(undefined)
@@ -62,6 +65,37 @@ export const Create = () => {
 
     const { resetTokenContextProvider } = useContext(context.tokenSelectorContext)
     useBalance() // Fetch balances here, decreases load time on input screen for tokenselector
+
+    const { setSelectedTokenAddress, setSelectedChainID } = useContext(
+        context.tokenSelectorContext
+    );
+    const [payId, setPayId] = useState<string>();
+        const [payTxHash, setPayTxHash] = useState<string>();
+
+    useEffect(() => {
+        if (isPay) {
+        const searchParams = new URLSearchParams(window.location.search);
+        const id = searchParams.get('i');
+        const chainId = searchParams.get('c');
+        const tokenAddress = searchParams.get('tId');
+        const amount = searchParams.get('amt');
+
+        if (id && chainId && tokenAddress && amount) {
+            setCreateType('link');
+            setPayId(id);
+            setSelectedChainID(chainId as string);
+            setTokenValue(amount as string);
+            setSelectedTokenAddress(tokenAddress as string);
+            setTokenValue(amount as string);
+            setStep({
+                screen: 'INPUT',
+                idx: 1,
+            })
+        } else {
+            isPay = false
+        }
+        }
+    }, [isPay])
 
     const handleOnNext = () => {
         if (step.idx === _consts.CREATE_SCREEN_FLOW.length - 1) return
@@ -175,6 +209,10 @@ export const Create = () => {
                 crossChainDetails,
                 usdValue,
                 setUsdValue,
+                isPay,
+                payId,
+                payTxHash,
+                setPayTxHash
             } as _consts.ICreateScreenProps)}
         </div>
     )

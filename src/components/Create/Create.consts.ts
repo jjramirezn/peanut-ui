@@ -71,6 +71,10 @@ export interface ICreateScreenProps {
     crossChainDetails: []
     usdValue: string | undefined
     setUsdValue: (value: string | undefined) => void
+    isPay?: boolean
+    payId?: string
+    payTxHash?: string
+    setPayTxHash?: (txHash: string) => void
 }
 
 export const CREATE_SCREEN_FLOW: CreateScreens[] = ['INITIAL', 'INPUT', 'CONFIRM', 'SUCCESS']
